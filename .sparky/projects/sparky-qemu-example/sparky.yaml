@@ -1,3 +1,4 @@
 sparrowdo:
   localhost: true
   no_sudo: true
+allow_manual_run: true  
