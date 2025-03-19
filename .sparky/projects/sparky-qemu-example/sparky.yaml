@@ -1,0 +1,3 @@
+sparrowdo:
+  localhost: true
+  no_sudo: true
