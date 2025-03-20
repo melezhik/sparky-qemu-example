@@ -56,7 +56,11 @@ if !tags()<stage> {
   my $ssh-ok = False;
 
   for 1 .. 20 -> $i {
-    my $s = task-run "scm/tasks/check-ssh"; 
+    my $s = task-run "scm/tasks/check-ssh", %(
+      :host<127.0.0.1>,
+      :port<10022>,
+      :user<admin>,
+    ); 
     if $s<state> eq "alive" {
       $ssh-ok = True;
       last;

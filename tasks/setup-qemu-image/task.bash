@@ -26,9 +26,9 @@ users:
       ssh-rsa %key%
 DATA
 
-export KEY=$(cat ~/.ssh/id_rsa.pub)
+KEY=$(cat ~/.ssh/id_rsa.pub)
 echo $KEY
-sed -i -e 's/%key%/$KEY/' user-data
+sed 's@%key%@'"$KEY"'@' user-data
 
 if test $os = "darwin"; then
   mkisofs -output /tmp/init.iso -volid cidata -joliet -rock user-data meta-data
