@@ -71,6 +71,7 @@ if !tags()<stage> {
 
   if $j.status eq "FAIL" or $ssh-ok == False {
     say "qemu box is not good";
+    task-run "scm/tasks/stop-qemu-box";
     exit(1);
   }
 
