@@ -4,6 +4,14 @@ Example of running qemu boxes under Sparky
 
 # Install
 
+Prepare image to test
+
+```
+mkdir -p ~/rocky-linux-distro
+cd rocky-linux-distro 
+wget https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-GenericCloud-Base-9.5-20241118.0.x86_64.qcow2 -O distro.qcow2
+```
+
 ```
 git clone https://github.com/melezhik/sparky-qemu-example.git 
 cp -r .sparky/projects/ ~/.sparky/projects/
