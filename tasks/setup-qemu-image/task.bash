@@ -27,8 +27,14 @@ users:
 DATA
 
 KEY=$(cat ~/.ssh/id_rsa.pub)
+
 echo $KEY
-sed 's@%key%@'"$KEY"'@' user-data
+
+raku -e '
+my $c = "user-data".IO.slurp(); 
+$c.=subst("%key%",%*ENV<KEY>);
+"user-data".IO.spurt($c);
+';
 
 if test $os = "darwin"; then
   mkisofs -output /tmp/init.iso -volid cidata -joliet -rock user-data meta-data
