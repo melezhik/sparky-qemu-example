@@ -6,8 +6,12 @@ mkdir -p ~/rocky-linux-distro
 cd ~/rocky-linux-distro
 
 distro_url=$(config distro_url)
+download_distro=$(config download_distro)
+if test $download_distro = "yes"; then
+  echo "download distro from $distro_url"
+  test -f distro.qcow2 || wget $distro_url -O distro.qcow2
+fi
 
-test -f distro.qcow2 || wget $distro_url -O distro.qcow2
 touch meta-data
 cat << DATA > user-data
 #cloud-config
