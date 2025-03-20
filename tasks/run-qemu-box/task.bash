@@ -5,6 +5,8 @@ iso=$(config iso)
 
 seed=$(config seed)
 
+test -f $iso && echo "qcow2 image exists will run qemu box"
+
 if test $os = "darwin"; then
     qemu-system-x86_64 \
     -net nic \
