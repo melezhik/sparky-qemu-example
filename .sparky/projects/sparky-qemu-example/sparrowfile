@@ -53,7 +53,12 @@ if !tags()<stage> {
 
   say "wait till qemu box is ready";
   
-  sleep(220);
+  for 1 .. 20 -> $i {
+    my $s = task-run "scm/tasks/check-ssh";
+    last if $s<state> eq "alive";
+    sleep(5);
+    say "[$i] ...";
+  }
 
   if $j.status eq "FAIL" {
     say "qemu box is not good";
