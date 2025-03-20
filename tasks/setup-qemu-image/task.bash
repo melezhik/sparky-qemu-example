@@ -5,7 +5,7 @@ mkdir -p ~/rocky-linux-distro
 
 cd ~/rocky-linux-distro
 
-distro_url=$(config distro_url
+distro_url=$(config distro_url)
 
 test -f distro.qcow2 || wget $distro_url -O distro.qcow2
 touch meta-data
