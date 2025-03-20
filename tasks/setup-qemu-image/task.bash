@@ -12,6 +12,7 @@ if test $download_distro = "yes"; then
 fi
 
 touch meta-data
+
 cat << DATA > user-data
 #cloud-config
 users:
@@ -24,6 +25,7 @@ users:
     ssh_authorized_keys:
       ssh-rsa %key%
 DATA
+
 KEY=$(cat ~/.ssh/id_rsa.pub)
 echo $KEY
 sed -i -e 's/%key%/$KEY/' user-data
