@@ -24,5 +24,11 @@ DATA
 KEY=$(cat ~/.ssh/id_rsa.pub)
 echo $KEY
 sed -i -e 's/%key%/$KEY/' user-data
-genisoimage -output /tmp/init.iso -V cidata -r -J user-data meta-data
+
+if test $os = "darwin"; then
+  mkisofs -output /tmp/init.iso -volid cidata -joliet -rock user-data meta-data
+else
+  genisoimage -output /tmp/init.iso -V cidata -r -J user-data meta-data
+fi
+
 ls -l /tmp/init.iso
