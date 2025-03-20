@@ -26,7 +26,7 @@ users:
       ssh-rsa %key%
 DATA
 
-KEY=$(cat ~/.ssh/id_rsa.pub)
+export KEY=$(cat ~/.ssh/id_rsa.pub)
 
 echo $KEY
 
