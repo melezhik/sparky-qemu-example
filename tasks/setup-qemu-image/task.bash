@@ -36,6 +36,8 @@ $c.=subst("%key%",%*ENV<KEY>);
 "user-data".IO.spurt($c);
 ';
 
+cat user-data
+
 if test $os = "darwin"; then
   mkisofs -output /tmp/init.iso -volid cidata -joliet -rock user-data meta-data
 else
