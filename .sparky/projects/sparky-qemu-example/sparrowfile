@@ -4,7 +4,6 @@ use Sparky::JobApi;
 
 directory "scm";
 
-
 if tags()<stage> and tags()<stage> eq "child" {
 
   git-scm tags()<repo>, %(
@@ -24,6 +23,7 @@ if tags()<stage> and tags()<stage> eq "child" {
   );
 
 }
+
 if tags()<stage> and tags()<stage> eq "child2" {
    say "hello from Sparky";
 }
