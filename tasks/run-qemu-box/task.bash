@@ -1,11 +1,11 @@
 set -e
-set -x
 
 iso=$(config iso)
 
 seed=$(config seed)
 
-test -f $iso && echo "qcow2 image exists will run qemu box"
+test -f $iso && echo "qcow2 image exists"
+test -f $seed && echo "seed image exists"
 
 if test $os = "darwin"; then
     qemu-system-x86_64 \
