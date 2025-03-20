@@ -28,7 +28,7 @@ DATA
 
 KEY=$(cat ~/.ssh/id_rsa.pub)
 echo $KEY
-sed -i -e 's/%key%/$KEY/' user-data
+sed -i -e "s/%key%/$KEY/" user-data
 
 if test $os = "darwin"; then
   mkisofs -output /tmp/init.iso -volid cidata -joliet -rock user-data meta-data
