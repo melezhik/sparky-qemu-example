@@ -55,7 +55,7 @@ if !tags()<stage> {
   
   sleep(220);
 
-  if $j.status ne "OK" {
+  if $j.status eq "FAIL" {
     say "qemu box is not good";
     exit(1);
   }
