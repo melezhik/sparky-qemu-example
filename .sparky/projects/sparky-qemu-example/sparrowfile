@@ -71,8 +71,9 @@ if !tags()<stage> {
     ),
     sparrowdo => %(
        :bootstrap,
-       :ssh_user => "admin",
-       :ssh_port => 10022
+       ssh_user => "admin",
+       ssh_port => 10022,
+       host => "127.0.0.1",
     ),
   });
 
