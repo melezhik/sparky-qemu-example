@@ -4,15 +4,16 @@ use Sparky::JobApi;
 
 directory "scm";
 
-git-scm config()<repo>, %(
-  to => "scm",
-  branch => config()<branch>,
-);
 
 if tags()<stage> and tags()<stage> eq "child" {
 
+  git-scm tags()<repo>, %(
+    to => "scm",
+    branch => tags()<branch>,
+  );
+
   task-run "scm/tasks/setup-qemu-image", %(
-    distro_url => config()<distro_url>,
+    distro_url => tags()<distro_url>,
   );
 
   bash "ls -lth {%*ENV<HOME>}/rocky-linux-distro";
@@ -28,6 +29,12 @@ if tags()<stage> and tags()<stage> eq "child2" {
 }
  
 if !tags()<stage> { 
+
+  git-scm config()<repo>, %(
+    to => "scm",
+    branch => config()<branch>,
+  );
+
   task-run "scm/tasks/stop-qemu-box";
   # spawns a child job
   my $j = Sparky::JobApi.new;
@@ -35,6 +42,9 @@ if !tags()<stage> {
     description => "run qemu box",
     tags => %(
       stage => "child",
+      distro_url => config()<distro_url>,
+      repo => config()<repo>,
+      branch => config()<branch>,
     ),
   });
 
