@@ -23,7 +23,7 @@ users:
     lock_passwd: false
     plain_text_passwd: qwerty
     ssh_authorized_keys:
-      ssh-rsa %key%
+      %key%
 DATA
 
 export KEY=$(cat ~/.ssh/id_rsa.pub)
