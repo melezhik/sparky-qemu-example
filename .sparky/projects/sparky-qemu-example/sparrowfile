@@ -51,12 +51,21 @@ if !tags()<stage> {
 
   say "queue spawned job, ",$j.info.raku;
 
+  say "wait till qemu box is ready";
+  
   sleep(220);
+
+  if $j.status ne "OK" {
+    say "qemu box is not good";
+    exit(1);
+  }
+
+  say "run bootstrap for qemu box";
 
   $j = Sparky::JobApi.new: :project<qemu_bootstrap>;
   
   $j.queue({
-    description => "boostrap qemu box",
+    description => "bootstrap qemu box",
     tags => %(
       stage => "child2",
     ),
