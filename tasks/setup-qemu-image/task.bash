@@ -1,4 +1,3 @@
-set -x
 set -e
 
 mkdir -p ~/rocky-linux-distro
