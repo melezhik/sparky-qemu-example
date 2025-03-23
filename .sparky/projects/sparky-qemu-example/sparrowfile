@@ -94,7 +94,7 @@ if !tags()<stage> {
 
   say "queue spawned job, ",$j.info.raku;
 
-  say "wait 10 munutes till bootstrap has finished";
+  say "wait for 10 munutes till bootstrap has finished";
 
   sleep(600);
 
