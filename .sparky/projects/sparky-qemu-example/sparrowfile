@@ -94,7 +94,9 @@ if !tags()<stage> {
 
   say "queue spawned job, ",$j.info.raku;
 
-  sleep(220);
+  say "wait 10 munutes till bootstrap has finished";
+
+  sleep(600);
 
   task-run "scm/tasks/stop-qemu-box";
 
