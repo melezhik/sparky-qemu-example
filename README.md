@@ -21,6 +21,7 @@ cp -r .sparky/projects/ ~/.sparky/projects/
 
 3. Go to sparky - http://127.0.0.1:4000 and run sparky-qemu-example job
 
-# Example
+# Example reports
 
 ![rocky](images/rocky.jpeg)
+![rocky3](images/rocky3.jpeg)
