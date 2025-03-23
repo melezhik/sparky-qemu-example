@@ -12,7 +12,6 @@ if test $os = "darwin"; then
     -net nic \
     -net user,hostfwd=tcp::10022-:22 \
     -m 6024M \
-    -cpu host \
     -smp 8 \
     -vnc none \
     -drive "file=$iso,index=0,format=qcow2,media=disk" \
@@ -27,5 +26,5 @@ else
     -vnc none \
     -drive "file=$iso,index=0,format=qcow2,media=disk" \
     -drive file=$seed,index=1,media=cdrom \
-    -nographic 
+    -nographic
 fi
