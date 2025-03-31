@@ -27,6 +27,11 @@ if tags()<stage> and tags()<stage> eq "child" {
 
 if tags()<stage> and tags()<stage> eq "child2" {
    say "hello from Sparky";
+   directory "scm";
+   git-scm "https://github.com/melezhik/rocky-linux-lamp-check.git", %(
+      to => "scm",
+   );
+   task-run "scm/files/tasks/lamp";
 }
  
 if !tags()<stage> { 
