@@ -19,7 +19,8 @@ if tags()<stage> and tags()<stage> eq "child" {
 
   task-run "scm/tasks/run-qemu-box", %(
     iso => "{%*ENV<HOME>}/rocky-linux-distro/distro.qcow2",
-    seed => "/tmp/init.iso"
+    seed => "/tmp/init.iso",
+    qemu_binary => tags()<qemu_binary>,
   );
 
 }
@@ -35,7 +36,9 @@ if !tags()<stage> {
     branch => config()<branch>,
   );
 
-  task-run "scm/tasks/stop-qemu-box";
+  task-run "scm/tasks/stop-qemu-box", %(
+    qemu_binary => config()<qemu-bunary>,
+  );
   # spawns a child job
   my $j = Sparky::JobApi.new;
   $j.queue({
@@ -46,6 +49,7 @@ if !tags()<stage> {
       repo => config()<repo>,
       branch => config()<branch>,
       download_distro => config()<download_distro> ?? "yes" !! "no",
+      qemu_binary => config()<qemu-binary>, 
     ),
   });
 
@@ -71,7 +75,9 @@ if !tags()<stage> {
 
   if $j.status eq "FAIL" or $ssh-ok == False {
     say "qemu box is not good";
-    task-run "scm/tasks/stop-qemu-box";
+    task-run "scm/tasks/stop-qemu-box", %(
+      qemu_binary => config()<qemu-bunary>,
+    );
     exit(1);
   }
 

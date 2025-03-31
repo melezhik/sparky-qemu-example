@@ -4,11 +4,15 @@ iso=$(config iso)
 
 seed=$(config seed)
 
+qemu_binary=$(config qemu_binary)
+
+echo "qemu_binary: $qemu_binary"
+
 test -f $iso && echo "qcow2 image exists"
 test -f $seed && echo "seed image exists"
 
 if test $os = "darwin"; then
-    qemu-system-x86_64 \
+    $qemu_binary \
     -net nic \
     -net user,hostfwd=tcp::10022-:22 \
     -m 6024M \
@@ -19,7 +23,7 @@ if test $os = "darwin"; then
     -drive file=$seed,index=1,media=cdrom \
     -nographic
 else
-    qemu-system-x86_64 \
+    $qemu_binary \
     -net nic \
     -net user,hostfwd=tcp::10022-:22 \
     -m 6024M \
