@@ -55,7 +55,7 @@ if !tags()<stage> {
   
   my $ssh-ok = False;
 
-  for 1 .. 20 -> $i {
+  for 1 .. 40 -> $i {
     my $s = task-run "scm/tasks/check-ssh", %(
       :host<127.0.0.1>,
       :port<10022>,
