@@ -3,4 +3,5 @@
   repo => "https://github.com/melezhik/sparky-qemu-example.git",
   branch => "main",
   download_distro => False,
+  qemu-binary => "qemu-kvm",
 )
