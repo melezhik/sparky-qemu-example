@@ -9,13 +9,12 @@ vars:
       default: https://github.com/melezhik/rocky-linux-lamp-check.git
       type: input
   -
-      name: skip_bootstrap
-      type: checkbox
-      default: true
-  -
       name: qemu_binary
       default: qemu-kvm
       type: input
-
+  -
+      name: skip_bootstrap
+      type: checkbox
+      default: true
 
        
