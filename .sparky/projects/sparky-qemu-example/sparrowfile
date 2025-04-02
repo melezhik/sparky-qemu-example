@@ -140,8 +140,6 @@ does Sparky::JobApi::Role
 
     directory "scm";
 
-    say config().raku;
-
     git-scm tags()<repo>, %(
       to => "scm",
       branch => tags()<branch>,
