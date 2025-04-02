@@ -6,7 +6,7 @@ allow_manual_run: true
 vars:
   -
       name: use_case_repo
-      default: git@github.com:melezhik/rocky-linux-lamp-check.git
+      default: https://github.com/melezhik/rocky-linux-lamp-check.git
       type: input
   -
       name: skip_bootstrap
