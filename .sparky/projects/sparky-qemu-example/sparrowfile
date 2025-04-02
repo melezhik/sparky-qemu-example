@@ -146,8 +146,8 @@ does Sparky::JobApi::Role
       branch => tags()<branch>,
     );
 
-    sleep(500);
-    
+    #sleep(500);
+
     task-run "scm/tasks/setup-qemu-image", %(
       distro_url => tags()<distro_url>,
     );
