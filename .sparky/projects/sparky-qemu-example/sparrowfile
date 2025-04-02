@@ -53,11 +53,12 @@ does Sparky::JobApi::Role
         $ssh-ok = True;
         last;
       }
-      sleep(5);
+      sleep(10);
       say "[$i] ...";
 
-      my $job-status = $j.status;
-      if $job-status eq "FAIL" {
+      say "qemu-session job status: ", $j.status;
+
+      unless $j.status eq "RUNNING" {
         say "qemu box is not good, stopping qemu session and exiting ...";
         task-run "scm/tasks/stop-qemu-box", %(
           qemu_binary => tags()<qemu_binary>,
