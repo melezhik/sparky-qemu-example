@@ -5,7 +5,12 @@ if test "$qemu_binary" = ""; then
     exit 1 
 fi
 
-which $qemu_binary || exit 1
+if test which $qemu_binary; then
+    :
+else
+    echo "$qemu_binary does not exist"
+    exit 1
+fi
 
 echo "killing by $qemu_binary"
 
