@@ -56,18 +56,18 @@ does Sparky::JobApi::Role
       sleep(10);
       say "[$i] ...";
 
-      #say "qemu-session job status: ", $j.status;
+      say "qemu-session job status: ", $j.status;
 
-      # unless $j.status eq "RUNNING" {
-      #   say "qemu box is not good, stopping qemu session and exiting ...";
-      #   task-run "scm/tasks/stop-qemu-box", %(
-      #     qemu_binary => tags()<qemu_binary>,
-      #   );
-      #   exit(1); 
-      # }
+      unless $j.status eq "RUNNING" {
+        say "qemu box is not good, stopping qemu session and exiting ...";
+        task-run "scm/tasks/stop-qemu-box", %(
+          qemu_binary => tags()<qemu_binary>,
+        );
+        exit(1); 
+      }
     }
 
-    if $ssh-ok == False {
+    if $j.status eq "FAIL" or $ssh-ok == False {
       say "qemu box is not good";
       task-run "scm/tasks/stop-qemu-box", %(
         qemu_binary => tags()<qemu_binary>,
@@ -146,6 +146,8 @@ does Sparky::JobApi::Role
       branch => tags()<branch>,
     );
 
+    sleep(500);
+    
     task-run "scm/tasks/setup-qemu-image", %(
       distro_url => tags()<distro_url>,
     );
