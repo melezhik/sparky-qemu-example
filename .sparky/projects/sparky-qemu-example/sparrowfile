@@ -75,8 +75,6 @@ does Sparky::JobApi::Role
       exit(1);
     }
 
-    say "run bootstrap for qemu box";
-
     unless tags()<skip_bootstrap> {
 
       $j = Sparky::JobApi.new: :project<qemu-bootstrap>;
@@ -108,6 +106,8 @@ does Sparky::JobApi::Role
         exit(1);      
       }
     }
+
+    say "run use case scenario on qemu box";
 
     $j = Sparky::JobApi.new: :project<qemu-use-case>;
       

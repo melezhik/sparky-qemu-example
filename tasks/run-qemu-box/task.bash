@@ -15,7 +15,7 @@ if test $os = "darwin"; then
     $qemu_binary \
     -net nic \
     -net user,hostfwd=tcp::10022-:22 \
-    -m 6024M \
+    -m 3024M \
     -cpu max \
     -smp 8 \
     -vnc none \
