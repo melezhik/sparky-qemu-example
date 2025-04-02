@@ -14,9 +14,8 @@ fi
 
 echo "killing by $qemu_binary"
 
-exit 0
+#exit 0
 
-ps aux | grep "$qemu_binary" | grep -v grep | awk '{print "kill -9 " $2}' | sh
-#ps aux | grep "${qemu_binary}" | grep -v grep | awk '{print "kill -9 " $2}'
+ps aux | grep "$qemu_binary" | grep -v grep | grep -v sparrowdo | awk '{print "kill -9 " $2}' | sh
 
 echo "done"
