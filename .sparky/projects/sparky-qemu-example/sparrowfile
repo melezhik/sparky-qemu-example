@@ -2,113 +2,172 @@
 
 use Sparky::JobApi;
 
-directory "scm";
+class Pipeline
 
-if tags()<stage> and tags()<stage> eq "child" {
+does Sparky::JobApi::Role
 
-  git-scm tags()<repo>, %(
-    to => "scm",
-    branch => tags()<branch>,
-  );
+{
 
-  task-run "scm/tasks/setup-qemu-image", %(
-    distro_url => tags()<distro_url>,
-  );
+  method stage-main {
 
-  bash "ls -lth {%*ENV<HOME>}/rocky-linux-distro";
+    directory "scm";
 
-  task-run "scm/tasks/run-qemu-box", %(
-    iso => "{%*ENV<HOME>}/rocky-linux-distro/distro.qcow2",
-    seed => "/tmp/init.iso",
-    qemu_binary => tags()<qemu_binary>,
-  );
-
-}
-
-if tags()<stage> and tags()<stage> eq "child2" {
-   say "hello from Sparky";
-   directory "scm";
-   git-scm "https://github.com/melezhik/rocky-linux-lamp-check.git", %(
+    git-scm config()<repo>, %(
       to => "scm",
-   );
-   task-run "scm/files/tasks/lamp";
-}
- 
-if !tags()<stage> { 
-
-  git-scm config()<repo>, %(
-    to => "scm",
-    branch => config()<branch>,
-  );
-
-  task-run "scm/tasks/stop-qemu-box", %(
-    qemu_binary => config()<qemu-binary>,
-  );
-  # spawns a child job
-  my $j = Sparky::JobApi.new;
-  $j.queue({
-    description => "run qemu box",
-    tags => %(
-      stage => "child",
-      distro_url => config()<distro_url>,
-      repo => config()<repo>,
       branch => config()<branch>,
-      download_distro => config()<download_distro> ?? "yes" !! "no",
-      qemu_binary => config()<qemu-binary>, 
-    ),
-  });
+    );
 
-  say "queue spawned job, ",$j.info.raku;
-
-  say "wait till qemu box is ready";
-  
-  my $ssh-ok = False;
-
-  for 1 .. 40 -> $i {
-    my $s = task-run "scm/tasks/check-ssh", %(
-      :host<127.0.0.1>,
-      :port<10022>,
-      :user<admin>,
-    ); 
-    if $s<state> eq "alive" {
-      $ssh-ok = True;
-      last;
-    }
-    sleep(5);
-    say "[$i] ...";
-  }
-
-  if $j.status eq "FAIL" or $ssh-ok == False {
-    say "qemu box is not good";
     task-run "scm/tasks/stop-qemu-box", %(
       qemu_binary => config()<qemu-binary>,
     );
-    exit(1);
+
+    # spawns a child job
+    
+    my $j = self.new-job: :project<qemu-session>;
+
+    $j.queue({
+      description => "start qemu session",
+      tags => %(
+        stage => "qemu-session",
+        distro_url => config()<distro_url>,
+        repo => config()<repo>,
+        branch => config()<branch>,
+        download_distro => config()<download_distro> ?? "yes" !! "no",
+        qemu_binary => config()<qemu-binary>, 
+      ),
+    });
+
+    say "queue spawned job, ",$j.info.raku;
+
+    say "wait till qemu box is ready";
+    
+    my $ssh-ok = False;
+
+    for 1 .. 40 -> $i {
+      my $s = task-run "scm/tasks/check-ssh", %(
+        :host<127.0.0.1>,
+        :port<10022>,
+        :user<admin>,
+      ); 
+      if $s<state> eq "alive" {
+        $ssh-ok = True;
+        last;
+      }
+      sleep(5);
+      say "[$i] ...";
+    }
+
+    if $j.status eq "FAIL" or $ssh-ok == False {
+      say "qemu box is not good";
+      task-run "scm/tasks/stop-qemu-box", %(
+        qemu_binary => config()<qemu-binary>,
+      );
+      exit(1);
+    }
+
+    say "run bootstrap for qemu box";
+
+    unless tags()<skip_bootstrap> {
+
+      $j = Sparky::JobApi.new: :project<qemu-bootstrap>;
+      
+      $j.queue({
+        description => "bootstrap qemu box",
+        tags => %(
+          stage => "qemu-bootstrap",
+        ),
+        sparrowdo => %(
+          :bootstrap,
+          ssh_user => "admin",
+          ssh_port => 10022,
+          host => "127.0.0.1",
+        ),
+      });
+
+      say "queue spawned job, ",$j.info.raku;
+
+      say "wait up to for 15 munutes till bootstrap has finished";
+
+      my $st = self.wait-job($j, %( :15timeout ) );
+
+      unless $st<OK> {
+        say "qemu box is not good, stopping qemu session and exiting ...";
+        task-run "scm/tasks/stop-qemu-box", %(
+          qemu_binary => config()<qemu-binary>,
+        );
+        exit(1);      
+      }
+    }
+
+    $j = Sparky::JobApi.new: :project<qemu-use-case>;
+      
+    $j.queue({
+      description => "use case scenario",
+      tags => %(
+        stage => "use-case",
+
+      ),
+      sparrowdo => %(
+        ssh_user => "admin",
+        ssh_port => 10022,
+        host => "127.0.0.1",
+        :no_sudo,
+        use_case_repo => tags()<use_case_repo>,
+      ),
+    });
+
+    say "queue spawned job, ",$j.info.raku;
+
+    say "wait up to 5 munutes till scenario has finished";
+
+    my $st = self.wait-job($j, %( :5timeout ) );
+
+    task-run "scm/tasks/stop-qemu-box", %(
+      qemu_binary => config()<qemu-binary>,
+    );
   }
 
-  say "run bootstrap for qemu box";
+  method stage-qemu-session {
 
-  $j = Sparky::JobApi.new: :project<qemu_bootstrap>;
-  
-  $j.queue({
-    description => "bootstrap qemu box",
-    tags => %(
-      stage => "child2",
-    ),
-    sparrowdo => %(
-       :bootstrap,
-       ssh_user => "admin",
-       ssh_port => 10022,
-       host => "127.0.0.1",
-    ),
-  });
+    directory "scm";
 
-  say "queue spawned job, ",$j.info.raku;
+    git-scm tags()<repo>, %(
+      to => "scm",
+      branch => tags()<branch>,
+    );
 
-  say "wait for 10 munutes till bootstrap has finished";
+    task-run "scm/tasks/setup-qemu-image", %(
+      distro_url => tags()<distro_url>,
+    );
 
-  sleep(600);
+    bash "ls -lth {%*ENV<HOME>}/rocky-linux-distro";
 
-  task-run "scm/tasks/stop-qemu-box";
+    task-run "scm/tasks/run-qemu-box", %(
+      iso => "{%*ENV<HOME>}/rocky-linux-distro/distro.qcow2",
+      seed => "/tmp/init.iso",
+      qemu_binary => tags()<qemu_binary>,
+    );
 
-}  
+  }
+
+  method stage-qemu-bootstrap {
+    say "hello from RockyLinux";
+  }
+
+  method stage-qemu-use-case {
+
+    directory "scm";
+
+    git-scm tags()<use_case_repo>, %(
+        to => "scm",
+    );
+
+    if "scm/main.raku".IO ~~ :e {
+      EVALFILE "scm/main.raku";
+    } else {
+        warn "no file main.raku found, nothing to do"
+    }
+
+  }
+ 
+}
