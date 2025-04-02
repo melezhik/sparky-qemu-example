@@ -5,7 +5,7 @@ if test "$qemu_binary" = ""; then
     exit 1 
 fi
 
-if test which $qemu_binary; then
+if which $qemu_binary; then
     :
 else
     echo "$qemu_binary does not exist"

@@ -10,11 +10,13 @@ vars:
       type: input
   -
       name: qemu_binary
+      values: [ qemu-kvm, qemu-system-x86_64 ]
+      type: select
       default: qemu-kvm
-      type: input
   -
       name: skip_bootstrap
       type: checkbox
       default: true
+
 
        
