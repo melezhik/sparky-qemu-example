@@ -60,7 +60,7 @@ does Sparky::JobApi::Role
       if $job-status eq "FAIL" {
         say "qemu box is not good, stopping qemu session and exiting ...";
         task-run "scm/tasks/stop-qemu-box", %(
-          qemu_binary => config()<qemu_binary>,
+          qemu_binary => tags()<qemu_binary>,
         );
         exit(1); 
       }
@@ -102,7 +102,7 @@ does Sparky::JobApi::Role
       unless $st<OK> {
         say "qemu box is not good, stopping qemu session and exiting ...";
         task-run "scm/tasks/stop-qemu-box", %(
-          qemu_binary => config()<qemu_binary>,
+          qemu_binary => tags()<qemu_binary>,
         );
         exit(1);      
       }
