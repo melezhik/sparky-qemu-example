@@ -18,7 +18,7 @@ does Sparky::JobApi::Role
     );
 
     task-run "scm/tasks/stop-qemu-box", %(
-      qemu_binary => config()<qemu-binary>,
+      qemu_binary => tags()<qemu-binary>,
     );
 
     # spawns a child job
@@ -33,7 +33,7 @@ does Sparky::JobApi::Role
         repo => config()<repo>,
         branch => config()<branch>,
         download_distro => config()<download_distro> ?? "yes" !! "no",
-        qemu_binary => config()<qemu-binary>, 
+        qemu_binary => tags()<qemu-binary>, 
       ),
     });
 
@@ -55,12 +55,21 @@ does Sparky::JobApi::Role
       }
       sleep(5);
       say "[$i] ...";
+
+      my $job-status = $j.status;
+      if $job-status eq "FAIL" {
+        say "qemu box is not good, stopping qemu session and exiting ...";
+        task-run "scm/tasks/stop-qemu-box", %(
+          qemu_binary => tags()<qemu-binary>,
+        );
+        exit(1); 
+      }
     }
 
     if $j.status eq "FAIL" or $ssh-ok == False {
       say "qemu box is not good";
       task-run "scm/tasks/stop-qemu-box", %(
-        qemu_binary => config()<qemu-binary>,
+        qemu_binary => tags()<qemu-binary>,
       );
       exit(1);
     }
@@ -93,7 +102,7 @@ does Sparky::JobApi::Role
       unless $st<OK> {
         say "qemu box is not good, stopping qemu session and exiting ...";
         task-run "scm/tasks/stop-qemu-box", %(
-          qemu_binary => config()<qemu-binary>,
+          qemu_binary => tags()<qemu-binary>,
         );
         exit(1);      
       }
@@ -123,7 +132,7 @@ does Sparky::JobApi::Role
     my $st = self.wait-job($j, %( :5timeout ) );
 
     task-run "scm/tasks/stop-qemu-box", %(
-      qemu_binary => config()<qemu-binary>,
+      qemu_binary => tags()<qemu-binary>,
     );
   }
 
