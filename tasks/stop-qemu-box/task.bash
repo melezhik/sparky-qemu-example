@@ -1,6 +1,6 @@
 qemu_binary=$(config qemu_binary)
 
-if test "$qemu_binary" -eq ""; then
+if test "$qemu_binary" = ""; then
     echo "qemu_binary is not set";
     exit 1 
 fi
