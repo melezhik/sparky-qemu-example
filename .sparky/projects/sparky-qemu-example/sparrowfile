@@ -170,6 +170,8 @@ does Sparky::JobApi::Role
 
     directory "scm";
 
+    bash "sudo dnf install git -y";
+    
     git-scm tags()<use_case_repo>, %(
         to => "scm",
         branch => "HEAD",
