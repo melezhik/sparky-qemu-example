@@ -49,5 +49,6 @@ Path to qemu binary
 
 # Example reports
 
-![rocky](images/rocky.jpeg)
+![rocky1](images/main-menu.jpeg)
+![rocky2](images/rocky.jpeg)
 ![rocky3](images/rocky3.jpeg)
