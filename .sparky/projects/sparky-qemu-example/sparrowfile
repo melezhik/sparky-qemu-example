@@ -118,14 +118,13 @@ does Sparky::JobApi::Role
       description => "use case scenario",
       tags => %(
         stage => "use-case",
-
+        use_case_repo => tags()<use_case_repo>,
       ),
       sparrowdo => %(
         ssh_user => "admin",
         ssh_port => 10022,
         host => "127.0.0.1",
         :no_sudo,
-        use_case_repo => tags()<use_case_repo>,
       ),
     });
 
@@ -175,7 +174,7 @@ does Sparky::JobApi::Role
 
     directory "scm";
 
-    sleep(300);
+    #sleep(3000);
     
     bash "sudo yum install git -y";
 
