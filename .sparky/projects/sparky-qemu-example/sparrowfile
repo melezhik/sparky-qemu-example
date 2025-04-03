@@ -130,9 +130,9 @@ does Sparky::JobApi::Role
 
     say "queue spawned job, ",$j.info.raku;
 
-    say "wait up to 5 minutes till scenario has finished";
+    say "wait up to 15 minutes till scenario has finished";
 
-    my $st = self.wait-job($j, %( :300timeout ) );
+    my $st = self.wait-job($j, %( :900timeout ) );
 
     if tags()<qemu_new_session> {
       task-run "scm/tasks/stop-qemu-box", %(
