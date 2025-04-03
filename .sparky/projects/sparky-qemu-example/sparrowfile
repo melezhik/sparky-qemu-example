@@ -125,6 +125,7 @@ does Sparky::JobApi::Role
         ssh_port => 10022,
         host => "127.0.0.1",
         :no_sudo,
+        :debug,
       ),
     });
 
