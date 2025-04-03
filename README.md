@@ -31,8 +31,8 @@ Sparrow dependencies installed
 
 ## qemu_new_session
 
-Disable this if you already have active qemu session (VM running and accessible
-by ssh, port 10022, user admin)
+Disable this if you already have an active qemu session (VM running and accessible
+by ssh, port 10022, login: admin) and so don't want to start a new session
 
 ## qemu_shut_on_fail
 
