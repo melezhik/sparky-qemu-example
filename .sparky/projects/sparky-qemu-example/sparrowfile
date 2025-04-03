@@ -176,6 +176,8 @@ does Sparky::JobApi::Role
 
     #sleep(3000);
     
+    bash "echo OK";
+
     bash "sudo yum install git -y";
 
     git-scm tags()<use_case_repo>, %(
