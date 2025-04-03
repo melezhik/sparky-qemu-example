@@ -17,99 +17,102 @@ does Sparky::JobApi::Role
       branch => config()<branch>,
     );
 
-    task-run "scm/tasks/stop-qemu-box", %(
-      qemu_binary => tags()<qemu_binary>,
-    );
-
-    # spawns a child job
-    
-    my $j = self.new-job: :project<qemu-session>;
-
-    $j.queue({
-      description => "start qemu session",
-      tags => %(
-        stage => "qemu-session",
-        distro_url => config()<distro_url>,
-        repo => config()<repo>,
-        branch => config()<branch>,
-        download_distro => config()<download_distro> ?? "yes" !! "no",
-        qemu_binary => tags()<qemu_binary>, 
-      ),
-    });
-
-    say "queue spawned job, ",$j.info.raku;
-
-    say "wait till qemu box is ready";
-    
-    my $ssh-ok = False;
-
-    for 1 .. 40 -> $i {
-      my $s = task-run "scm/tasks/check-ssh", %(
-        :host<127.0.0.1>,
-        :port<10022>,
-        :user<admin>,
-      ); 
-      if $s<state> eq "alive" {
-        $ssh-ok = True;
-        last;
-      }
-      sleep(10);
-      say "[$i] ...";
-
-      say "qemu-session job status: ", $j.status;
-
-      unless $j.status eq "RUNNING" {
-        say "qemu box is not good, stopping qemu session and exiting ...";
-        task-run "scm/tasks/stop-qemu-box", %(
-          qemu_binary => tags()<qemu_binary>,
-        );
-        exit(1); 
-      }
-    }
-
-    if $j.status eq "FAIL" or $ssh-ok == False {
-      say "qemu box is not good";
+    if tags()<qemu_new_session> {
+      
       task-run "scm/tasks/stop-qemu-box", %(
         qemu_binary => tags()<qemu_binary>,
       );
-      exit(1);
-    }
 
-    unless tags()<skip_bootstrap> {
-
-      $j = Sparky::JobApi.new: :project<qemu-bootstrap>;
+      # spawns a child job
       
+      my $j = self.new-job: :project<qemu-session>;
+
       $j.queue({
-        description => "bootstrap qemu box",
+        description => "start qemu session",
         tags => %(
-          stage => "qemu-bootstrap",
-        ),
-        sparrowdo => %(
-          :bootstrap,
-          ssh_user => "admin",
-          ssh_port => 10022,
-          host => "127.0.0.1",
+          stage => "qemu-session",
+          distro_url => config()<distro_url>,
+          repo => config()<repo>,
+          branch => config()<branch>,
+          download_distro => config()<download_distro> ?? "yes" !! "no",
+          qemu_binary => tags()<qemu_binary>, 
         ),
       });
 
       say "queue spawned job, ",$j.info.raku;
 
-      say "wait up to 20 munutes till bootstrap has finished";
+      say "wait till qemu box is ready";
+      
+      my $ssh-ok = False;
 
-      my $st = self.wait-job($j, %( :1200timeout ) );
+      for 1 .. 40 -> $i {
+        my $s = task-run "scm/tasks/check-ssh", %(
+          :host<127.0.0.1>,
+          :port<10022>,
+          :user<admin>,
+        ); 
+        if $s<state> eq "alive" {
+          $ssh-ok = True;
+          last;
+        }
+        sleep(10);
+        say "[$i] ...";
 
-      unless $st<OK> {
-        say "qemu box is not good, stopping qemu session and exiting ...";
+        say "qemu-session job status: ", $j.status;
+
+        unless $j.status eq "RUNNING" {
+          say "qemu box is not good, stopping qemu session and exiting ...";
+          task-run "scm/tasks/stop-qemu-box", %(
+            qemu_binary => tags()<qemu_binary>,
+          );
+          exit(1); 
+        }
+      }
+
+      if $j.status eq "FAIL" or $ssh-ok == False {
+        say "qemu box is not good";
         task-run "scm/tasks/stop-qemu-box", %(
           qemu_binary => tags()<qemu_binary>,
         );
-        exit(1);      
+        exit(1);
+      }
+
+      unless tags()<skip_bootstrap> {
+
+        $j = Sparky::JobApi.new: :project<qemu-bootstrap>;
+        
+        $j.queue({
+          description => "bootstrap qemu box",
+          tags => %(
+            stage => "qemu-bootstrap",
+          ),
+          sparrowdo => %(
+            :bootstrap,
+            ssh_user => "admin",
+            ssh_port => 10022,
+            host => "127.0.0.1",
+          ),
+        });
+
+        say "queue spawned job, ",$j.info.raku;
+
+        say "wait up to 20 munutes till bootstrap has finished";
+
+        my $st = self.wait-job($j, %( :1200timeout ) );
+
+        unless $st<OK> {
+          say "qemu box is not good, stopping qemu session and exiting ...";
+          task-run "scm/tasks/stop-qemu-box", %(
+            qemu_binary => tags()<qemu_binary>,
+          );
+          exit(1);      
+        }
       }
     }
 
     say "run use case scenario on qemu box";
 
-    $j = Sparky::JobApi.new: :project<qemu-use-case>;
+    my $j = Sparky::JobApi.new: :project<qemu-use-case>;
       
     $j.queue({
       description => "use case scenario",
@@ -132,9 +135,11 @@ does Sparky::JobApi::Role
 
     my $st = self.wait-job($j, %( :300timeout ) );
 
-    task-run "scm/tasks/stop-qemu-box", %(
-      qemu_binary => tags()<qemu_binary>,
-    );
+    if tags()<qemu_new_session> {
+      task-run "scm/tasks/stop-qemu-box", %(
+        qemu_binary => tags()<qemu_binary>,
+      );
+    }
   }
 
   method stage-qemu-session {

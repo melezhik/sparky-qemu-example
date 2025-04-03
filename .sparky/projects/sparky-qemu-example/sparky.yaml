@@ -17,6 +17,10 @@ vars:
       name: skip_bootstrap
       type: checkbox
       default: true
+  -
+      name: qemu_new_session
+      type: checkbox
+      default: true
 
 
        
