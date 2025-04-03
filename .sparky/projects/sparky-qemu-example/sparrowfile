@@ -175,7 +175,9 @@ does Sparky::JobApi::Role
     );
 
     if "scm/main.raku".IO ~~ :e {
-      EVALFILE "scm/main.raku";
+      say "load scenario from main.raku";
+      chdir "scm/";
+      EVALFILE "main.raku";
     } else {
         warn "no file main.raku found, nothing to do"
     }
