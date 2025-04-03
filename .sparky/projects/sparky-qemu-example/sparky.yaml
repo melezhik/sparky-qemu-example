@@ -22,5 +22,9 @@ vars:
       type: checkbox
       default: true
 
+  -
+        name: qemu_stop_on_fail
+        type: checkbox
+        default: true
 
        
