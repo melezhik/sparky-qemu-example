@@ -172,6 +172,7 @@ does Sparky::JobApi::Role
 
     git-scm tags()<use_case_repo>, %(
         to => "scm",
+        branch => "HEAD",
     );
 
     if "scm/main.raku".IO ~~ :e {
