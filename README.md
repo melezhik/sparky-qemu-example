@@ -40,7 +40,7 @@ Enable this if you want to shut qemu instance (VM) in case of use case scenario 
 
 ## use_case_repo
 
-Use case scenario git repository, as an example look at https://github.com/melezhik/rocky-linux-lamp-check , the repo has to have a `main.raku` file at the root, which
+Use case scenario git repository, as an example look at https://github.com/melezhik/rocky-linux-lamp-check , the repo has to have [main.raku](https://github.com/melezhik/rocky-linux-lamp-check/blob/main/main.raku) file at the root, which
 is an entry point for use case scenario
 
 ## qemu_binary
