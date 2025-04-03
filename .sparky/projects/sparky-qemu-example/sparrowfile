@@ -166,7 +166,7 @@ does Sparky::JobApi::Role
     say "hello from RockyLinux";
   }
 
-  method stage-qemu-use-case {
+  method stage-use-case {
 
     directory "scm";
 
