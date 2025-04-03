@@ -18,7 +18,7 @@ does Sparky::JobApi::Role
     );
 
     if tags()<qemu_new_session> {
-      
+
       task-run "scm/tasks/stop-qemu-box", %(
         qemu_binary => tags()<qemu_binary>,
       );
@@ -175,6 +175,8 @@ does Sparky::JobApi::Role
 
     directory "scm";
 
+    sleep(300);
+    
     bash "sudo yum install git -y";
 
     git-scm tags()<use_case_repo>, %(
