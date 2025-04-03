@@ -94,7 +94,7 @@ does Sparky::JobApi::Role
 
       say "queue spawned job, ",$j.info.raku;
 
-      say "wait up to for 10 munutes till bootstrap has finished";
+      say "wait up to 10 munutes till bootstrap has finished";
 
       my $st = self.wait-job($j, %( :600timeout ) );
 
