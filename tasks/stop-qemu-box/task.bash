@@ -12,7 +12,7 @@ else
     exit 1
 fi
 
-echo "killing by $qemu_binary"
+echo "killing proccess named [$qemu_binary]"
 
 #exit 0
 
