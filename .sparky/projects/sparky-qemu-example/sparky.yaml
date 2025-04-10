@@ -23,7 +23,7 @@ vars:
       default: true
 
   -
-      name: qemu_shut_on_fail
+      name: qemu_shut
       type: checkbox
       default: false
 
