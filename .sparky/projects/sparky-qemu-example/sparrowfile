@@ -135,7 +135,7 @@ does Sparky::JobApi::Role
 
     my $st = self.wait-job($j, %( :900timeout ) );
 
-    if tags()<qemu_new_session>  && tags()<qemu_shut_on_fail> {
+    if tags()<qemu_shut> {
       task-run "scm/tasks/stop-qemu-box", %(
         qemu_binary => tags()<qemu_binary>,
       );
