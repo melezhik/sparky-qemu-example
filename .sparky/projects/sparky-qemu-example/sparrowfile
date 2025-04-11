@@ -39,7 +39,7 @@ does Sparky::JobApi::Role
         ),
       });
 
-      say "queue spawned job, ",$j.info.raku;
+      say "queue qemu-session job, ",$j.info.raku;
 
       say "wait till qemu box is ready";
       
@@ -94,7 +94,7 @@ does Sparky::JobApi::Role
           ),
         });
 
-        say "queue spawned job, ",$j.info.raku;
+        say "queue bootstrap qemu job, ",$j.info.raku;
 
         say "wait up to 20 munutes till bootstrap has finished";
 
@@ -129,19 +129,18 @@ does Sparky::JobApi::Role
       ),
     });
 
-    say "queue spawned job, ",$j.info.raku;
+    say "queue use case job, ",$j.info.raku;
 
-    say "wait up to 15 minutes till scenario has finished";
+    say "wait up to 15 minutes till use case scenario has finished";
 
     my $st = self.wait-job($j, %( :900timeout ) );
 
-    # get use case job data
-    # if any 
+    # get use case job data if any 
 
     my $jdata = $j.get-stash();
 
     if $jdata<need-reboot> {
-       say "reboot signal reciever from child job, reboot qemu box";
+       say "reboot signal recieved from child job, reboot qemu box";
        my $j = Sparky::JobApi.new: :project<qemu-reboot>;
        $j.queue({
           description => "reboot qemu box",
@@ -157,8 +156,9 @@ does Sparky::JobApi::Role
           ),
         });
 
-        say "queue spawned job, ",$j.info.raku;
-        say "wait up to 5 minutes till scenario has finished";
+        say "queue qemu-reboot job, ",$j.info.raku;
+        say "wait up to 5 minutes till reboot has finished";
+
         my $st = self.wait-job($j, %( :300timeout ) );
         my $ssh-ok = False;
         for 1 .. 40 -> $i {
@@ -174,47 +174,49 @@ does Sparky::JobApi::Role
           sleep(10);
         say "[$i] ...";
         }
+
         if $ssh-ok == True {
 
-         say "run use case scenario on qemu box";
+          say "run use case scenario on qemu box";
 
-         my $j = Sparky::JobApi.new: :project<qemu-use-case>;
+          my $j = Sparky::JobApi.new: :project<qemu-use-case>;
       
-         $j.queue({
-           description => "use case scenario",
-           tags => %(
-              stage => "use-case",
-              use_case_repo => tags()<use_case_repo>,
-              :reboot-ok,
-           ),
-           sparrowdo => %(
-             ssh_user => "admin",
-             ssh_port => 10022,
-             host => "127.0.0.1",
-             :no_sudo,
-             #:debug,
-           ),
-        });
+          $j.queue({
+            description => "use case scenario",
+            tags => %(
+                stage => "use-case",
+                use_case_repo => tags()<use_case_repo>,
+                :reboot-ok,
+            ),
+            sparrowdo => %(
+              ssh_user => "admin",
+              ssh_port => 10022,
+              host => "127.0.0.1",
+              :no_sudo,
+              #:debug,
+            ),
+          });
 
-        say "queue spawned job, ",$j.info.raku;
+          say "queue use case job, ",$j.info.raku;
 
-        say "wait up to 15 minutes till scenario has finished";
+          say "wait up to 15 minutes till use case scenario has finished";
 
-        my $st = self.wait-job($j, %( :900timeout ) );
+          my $st = self.wait-job($j, %( :900timeout ) );
 
-          if tags()<qemu_shut>
+          if tags()<qemu_shut> {
             task-run "scm/tasks/stop-qemu-box", %(
               qemu_binary => tags()<qemu_binary>,
             );
           }
-
         } elsif tags()<qemu_shut> {
+          # handle case when vm has not showed up after reboot
           say "qemu box is not good, stopping qemu session and exiting ...";
           task-run "scm/tasks/stop-qemu-box", %(
             qemu_binary => tags()<qemu_binary>,
           );
           exit(1); 
         }
+      # reboot is not required, just stop VM in case qemu_shut is enabled  
     } elsif tags()<qemu_shut> {
         task-run "scm/tasks/stop-qemu-box", %(
           qemu_binary => tags()<qemu_binary>,
