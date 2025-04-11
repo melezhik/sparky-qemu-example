@@ -172,12 +172,12 @@ does Sparky::JobApi::Role
             last;
           }
           sleep(10);
-        say "[$i] ...";
+          say "[$i] ...";
         }
 
         if $ssh-ok == True {
 
-          say "run use case scenario on qemu box";
+          say "machine successfully rebooted, run use case scenario on qemu box";
 
           my $j = Sparky::JobApi.new: :project<qemu-use-case>;
       
@@ -208,7 +208,7 @@ does Sparky::JobApi::Role
               qemu_binary => tags()<qemu_binary>,
             );
           }
-        } elsif tags()<qemu_shut> {
+        } else {
           # handle case when vm has not showed up after reboot
           say "qemu box is not good, stopping qemu session and exiting ...";
           task-run "scm/tasks/stop-qemu-box", %(
