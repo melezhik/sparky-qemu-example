@@ -119,6 +119,8 @@ does Sparky::JobApi::Role
       tags => %(
         stage => "use-case",
         use_case_repo => tags()<use_case_repo>,
+        parent_job_id => tags()<SPARKY_JOB_ID>,
+        parent_job_name => tags()<SPARKY_PROJECT>,
       ),
       sparrowdo => %(
         ssh_user => "admin",
