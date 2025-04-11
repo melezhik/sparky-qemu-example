@@ -135,10 +135,90 @@ does Sparky::JobApi::Role
 
     my $st = self.wait-job($j, %( :900timeout ) );
 
-    if tags()<qemu_shut> {
-      task-run "scm/tasks/stop-qemu-box", %(
-        qemu_binary => tags()<qemu_binary>,
-      );
+    # get use case job data
+    # if any 
+
+    my $jdata = $j.get-stash();
+
+    if $jdata<need-reboot> {
+       say "reboot signal reciever from child job, reboot qemu box";
+       my $j = Sparky::JobApi.new: :project<qemu-reboot>;
+       $j.queue({
+          description => "reboot qemu box",
+          tags => %(
+            stage => "qemu-reboot",
+          ),
+          sparrowdo => %(
+            ssh_user => "admin",
+            ssh_port => 10022,
+            host => "127.0.0.1",
+            :no_sudo,
+            #:debug,
+          ),
+        });
+
+        say "queue spawned job, ",$j.info.raku;
+        say "wait up to 5 minutes till scenario has finished";
+        my $st = self.wait-job($j, %( :300timeout ) );
+        my $ssh-ok = False;
+        for 1 .. 40 -> $i {
+          my $s = task-run "scm/tasks/check-ssh", %(
+            :host<127.0.0.1>,
+            :port<10022>,
+            :user<admin>,
+          ); 
+          if $s<state> eq "alive" {
+            $ssh-ok = True;
+            last;
+          }
+          sleep(10);
+        say "[$i] ...";
+        }
+        if $ssh-ok == True {
+
+         say "run use case scenario on qemu box";
+
+         my $j = Sparky::JobApi.new: :project<qemu-use-case>;
+      
+         $j.queue({
+           description => "use case scenario",
+           tags => %(
+              stage => "use-case",
+              use_case_repo => tags()<use_case_repo>,
+              :reboot-ok,
+           ),
+           sparrowdo => %(
+             ssh_user => "admin",
+             ssh_port => 10022,
+             host => "127.0.0.1",
+             :no_sudo,
+             #:debug,
+           ),
+        });
+
+        say "queue spawned job, ",$j.info.raku;
+
+        say "wait up to 15 minutes till scenario has finished";
+
+        my $st = self.wait-job($j, %( :900timeout ) );
+
+          if tags()<qemu_shut>
+            task-run "scm/tasks/stop-qemu-box", %(
+              qemu_binary => tags()<qemu_binary>,
+            );
+          }
+
+        } elsif tags()<qemu_shut> {
+          say "qemu box is not good, stopping qemu session and exiting ...";
+          task-run "scm/tasks/stop-qemu-box", %(
+            qemu_binary => tags()<qemu_binary>,
+          );
+          exit(1); 
+        }
+    } elsif tags()<qemu_shut> {
+        task-run "scm/tasks/stop-qemu-box", %(
+          qemu_binary => tags()<qemu_binary>,
+        );
     }
   }
 
@@ -150,8 +230,6 @@ does Sparky::JobApi::Role
       to => "scm",
       branch => tags()<branch>,
     );
-
-    #sleep(500);
 
     task-run "scm/tasks/setup-qemu-image", %(
       distro_url => tags()<distro_url>,
@@ -174,8 +252,6 @@ does Sparky::JobApi::Role
   method stage-use-case {
 
     directory "scm";
-
-    #sleep(3000);
     
     bash "echo OK";
 
@@ -193,6 +269,12 @@ does Sparky::JobApi::Role
     } else {
         warn "no file main.raku found, nothing to do"
     }
+
+  }
+
+  method stage-qemu-reboot {
+    
+    bash "sudo reboot now";
 
   }
  
