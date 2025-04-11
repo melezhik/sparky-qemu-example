@@ -135,9 +135,9 @@ does Sparky::JobApi::Role
 
     my $st = self.wait-job($j, %( :900timeout ) );
 
-    # get use case job data if any 
-
-    my $jdata = $j.get-stash();
+    # check if child job send us any message
+    my $me = Sparky::JobApi.new: :mine;
+    my $jdata = $me.get-stash();
 
     if $jdata<need-reboot> {
        say "reboot signal recieved from child job, reboot qemu box";
