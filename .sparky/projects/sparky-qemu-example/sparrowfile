@@ -170,7 +170,7 @@ does Sparky::JobApi::Role
           );
           exit(1);      
         }
-        
+
         my $ssh-ok = False;
         for 1 .. 40 -> $i {
           my $s = task-run "scm/tasks/check-ssh", %(
@@ -289,9 +289,9 @@ does Sparky::JobApi::Role
 
     say "rebooting machine ...";
 
-    bash "sudo yum install coreutils -y";
+    #bash "sudo yum install coreutils -y";
   
-    bash "nohup bash -c 'sleep 10; sudo reboot now' </dev/null &";
+    bash "nohup bash -c 'sleep 30; sudo reboot now' </dev/null &";
 
   }
  
