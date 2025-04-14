@@ -162,6 +162,15 @@ does Sparky::JobApi::Role
         say "wait up to 5 minutes till reboot has finished";
 
         my $st = self.wait-job($j, %( :300timeout ) );
+
+        unless $st<OK> {
+          say "qemu box is not good, stopping qemu session and exiting ...";
+          task-run "scm/tasks/stop-qemu-box", %(
+            qemu_binary => tags()<qemu_binary>,
+          );
+          exit(1);      
+        }
+        
         my $ssh-ok = False;
         for 1 .. 40 -> $i {
           my $s = task-run "scm/tasks/check-ssh", %(
@@ -277,8 +286,12 @@ does Sparky::JobApi::Role
   }
 
   method stage-qemu-reboot {
-    
-    bash "sudo reboot now";
+
+    say "rebooting machine ...";
+
+    bash "sudo yum install coreutils -y";
+  
+    bash "nohup bash -c 'sleep 10; sudo reboot now' </dev/null &";
 
   }
  
