@@ -191,6 +191,8 @@ does Sparky::JobApi::Role
 
           say "machine successfully rebooted, run use case scenario on qemu box";
 
+          sleep(15); # wait till VM has rebooted 
+
           my $j = Sparky::JobApi.new: :project<qemu-use-case>;
       
           $j.queue({
