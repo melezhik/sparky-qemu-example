@@ -296,7 +296,7 @@ does Sparky::JobApi::Role
     
     bash "sudo yum install git -y";
 
-    git-scm tags()<use_case_repo>, %(
+    git-scm tags()<repo>, %(
         to => "scm",
         branch => "HEAD",
     );
