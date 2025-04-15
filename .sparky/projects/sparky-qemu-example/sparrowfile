@@ -289,10 +289,10 @@ does Sparky::JobApi::Role
 
     say "rebooting machine ...";
 
-    #bash "sudo yum install coreutils -y";
+    bash "sudo yum install coreutils -y";
   
-    bash "nohup bash -c 'sleep 30; sudo reboot now' </dev/null &";
-
+    task-run "scm/tasks/reboot";
+    
   }
  
 }
