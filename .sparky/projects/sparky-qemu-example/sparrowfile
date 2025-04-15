@@ -290,6 +290,15 @@ does Sparky::JobApi::Role
     say "rebooting machine ...";
 
     bash "sudo yum install coreutils -y";
+
+    directory "scm";
+    
+    bash "sudo yum install git -y";
+
+    git-scm tags()<use_case_repo>, %(
+        to => "scm",
+        branch => "HEAD",
+    );
   
     task-run "scm/tasks/reboot";
     
