@@ -148,6 +148,7 @@ does Sparky::JobApi::Role
           description => "reboot qemu box",
           tags => %(
             stage => "qemu-reboot",
+            repo => config()<repo>,
           ),
           sparrowdo => %(
             ssh_user => "admin",
