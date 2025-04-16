@@ -161,9 +161,9 @@ does Sparky::JobApi::Role
 
         say "queue qemu-reboot job, ",$j.info.raku;
 
-        say "wait up to 5 minutes till reboot has finished";
+        say "wait up to 7 minutes till reboot has finished";
 
-        my $st = self.wait-job($j, %( :300timeout ) );
+        my $st = self.wait-job($j, %( :420timeout ) );
 
         unless $st<OK> {
           say "qemu box is not good, stopping qemu session and exiting ...";
