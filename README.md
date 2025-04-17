@@ -16,7 +16,7 @@ wget https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-GenericCloud-Ba
 
 ```
 git clone https://github.com/melezhik/sparky-qemu-example.git 
-cp -r .sparky/projects/ ~/.sparky/projects/
+cp -r .sparky/projects ~/.sparky/
 ```
 
 3. Go to sparky - http://127.0.0.1:4000 and run sparky-qemu-example job
