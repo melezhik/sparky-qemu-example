@@ -26,5 +26,8 @@ vars:
       name: qemu_shut
       type: checkbox
       default: false
+  -
+      name: dump_task_code
+      type: checkbox
+      default: false
 
-       

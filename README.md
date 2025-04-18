@@ -47,6 +47,11 @@ is an entry point for use case scenario
 
 Path to qemu binary 
 
+## dump_task_code
+
+If enabled dump scenario code, useful for debugging
+
+
 # Example reports
 
 ![rocky1](images/main-menu.jpeg)

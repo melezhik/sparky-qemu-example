@@ -118,6 +118,7 @@ does Sparky::JobApi::Role
       description => "use case scenario",
       tags => %(
         stage => "use-case",
+        dump_task_code => tags()<dump_task_code> ?? "on" !! "off",
         use_case_repo => tags()<use_case_repo>,
         parent_job_id => tags()<SPARKY_JOB_ID>,
         parent_job_name => tags()<SPARKY_PROJECT>,
@@ -201,6 +202,7 @@ does Sparky::JobApi::Role
             description => "use case scenario",
             tags => %(
                 stage => "use-case",
+                dump_task_code => tags()<dump_task_code> ?? "on" !! "off",
                 use_case_repo => tags()<use_case_repo>,
                 :reboot-ok,
             ),
@@ -283,6 +285,10 @@ does Sparky::JobApi::Role
     if "scm/main.raku".IO ~~ :e {
       say "load scenario from main.raku";
       chdir "scm/";
+      if tags()<dump_task_code> eq "on" {
+        say "enable dump_task_code ...";
+        %*ENV<SP6_DUMP_TASK_CODE> = 1;
+      }
       EVALFILE "main.raku";
     } else {
         warn "no file main.raku found, nothing to do"
