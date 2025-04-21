@@ -17,7 +17,7 @@ cat << DATA > user-data
 #cloud-config
 users:
   - default
-  - name: admin
+  - name: alpine
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     lock_passwd: false
