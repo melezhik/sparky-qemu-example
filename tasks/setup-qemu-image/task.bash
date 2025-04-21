@@ -15,6 +15,8 @@ touch meta-data
 
 cat << DATA > user-data
 #cloud-config
+packages:
+  - su-exec
 users:
   - default
   - name: alpine
