@@ -8,8 +8,21 @@ Example of running qemu boxes under Sparky
 
 ```
 mkdir -p ~/rocky-linux-distro
+
 cd rocky-linux-distro 
-wget https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-GenericCloud-Base-9.5-20241118.0.x86_64.qcow2 -O distro.qcow2
+
+# download qcow2 image
+
+# depending on OS, uncomment one of the following "wget" lines
+
+# wget https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-GenericCloud-Base-9.5-20241118.0.x86_64.qcow2
+
+# wget https://dl-cdn.alpinelinux.org/alpine/v3.21/releases/cloud/generic_alpine-3.21.2-x86_64-bios-cloudinit-r0.qcow2 -O distro.qcow2
+
+
+# for alpine linux image increase size
+qemu-img resize distro.qcow2  +1G
+
 ```
 
 2. Copy sparky job
