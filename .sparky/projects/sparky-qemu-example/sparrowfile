@@ -77,8 +77,11 @@ does Sparky::JobApi::Role
         exit(1);
       }
 
+
       unless tags()<skip_bootstrap> {
 
+        sleep(10);
+  
         $j = Sparky::JobApi.new: :project<qemu-bootstrap>;
         
         $j.queue({
