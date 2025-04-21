@@ -17,6 +17,8 @@ touch meta-data
 
 cat << DATA > user-data
 #cloud-config
+runcmd:
+  - [ sh, -c, "apk --no-cache add sudo" ]
 users:
   - default
   - name: %user%
