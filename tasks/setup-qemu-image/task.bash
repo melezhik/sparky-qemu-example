@@ -6,6 +6,8 @@ cd ~/rocky-linux-distro
 
 distro_url=$(config distro_url)
 download_distro=$(config download_distro)
+user=$(config user)
+
 if test $download_distro = "yes"; then
   echo "download distro from $distro_url"
   test -f distro.qcow2 || wget $distro_url -O distro.qcow2
@@ -19,7 +21,7 @@ packages:
   - su-exec
 users:
   - default
-  - name: alpine
+  - name: %user%
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     lock_passwd: false
@@ -28,13 +30,21 @@ users:
       %key%
 DATA
 
-export KEY=$(cat ~/.ssh/id_rsa.pub)
+export CI_KEY=$(cat ~/.ssh/id_rsa.pub)
+export CI_USER=$user
 
-echo $KEY
+echo "CI user:" $CI_USER
+echo "CI key:" $CI_KEY
+
+raku -e '
+my $c = "user-data".IO.slurp();
+$c.=subst("%key%",%*ENV<CI_KEY>);
+"user-data".IO.spurt($c);
+';
 
 raku -e '
 my $c = "user-data".IO.slurp(); 
-$c.=subst("%key%",%*ENV<KEY>);
+$c.=subst("%user%",%*ENV<CI_USER>);
 "user-data".IO.spurt($c);
 ';
 

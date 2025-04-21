@@ -3,4 +3,5 @@
   repo => "https://github.com/melezhik/sparky-qemu-example.git",
   branch => "alpine",
   download_distro => False,
+  user => "alpine",
 )

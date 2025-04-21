@@ -49,7 +49,7 @@ does Sparky::JobApi::Role
         my $s = task-run "scm/tasks/check-ssh", %(
           :host<127.0.0.1>,
           :port<10022>,
-          :user<alpine>,
+          user => config()<user>,
         ); 
         if $s<state> eq "alive" {
           $ssh-ok = True;
@@ -182,7 +182,7 @@ does Sparky::JobApi::Role
           my $s = task-run "scm/tasks/check-ssh", %(
             :host<127.0.0.1>,
             :port<10022>,
-            :user<alpine>,
+            user => config()<user>,
           ); 
           if $s<state> eq "alive" {
             $ssh-ok = True;
