@@ -65,6 +65,29 @@ Path to qemu binary
 If enabled dump scenario code, useful for debugging
 
 
+# Clean up
+
+To start from the scratch:
+
+## Stop qemu session
+
+```bash
+s6 --task-run tasks/stop-qemu-box@qemu_binary=qemu-system-x86_64
+```
+
+## Remove image files
+
+
+```bash
+rm -rf /tmp/init.iso
+rm -rf ~/rocky-linux-distro/distro.qcow2
+```
+
+## Download new image
+
+See previous instruction
+
+
 # Example reports
 
 ![rocky1](images/main-menu.jpeg)
