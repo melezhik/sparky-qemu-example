@@ -81,7 +81,7 @@ does Sparky::JobApi::Role
 
       unless tags()<skip_bootstrap> {
 
-        sleep(10);
+        sleep(20);
   
         $j = Sparky::JobApi.new: :project<qemu-bootstrap>;
         
