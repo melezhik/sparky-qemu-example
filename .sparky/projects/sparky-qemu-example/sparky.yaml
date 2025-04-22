@@ -30,4 +30,8 @@ vars:
       name: dump_task_code
       type: checkbox
       default: false
-
+  -
+      name: cpu
+      values: [ host, max ]
+      type: select
+      default: max

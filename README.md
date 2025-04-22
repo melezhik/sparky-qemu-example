@@ -21,6 +21,7 @@ cd rocky-linux-distro
 
 
 # for alpine linux image increase size
+
 qemu-img resize distro.qcow2  +1G
 
 ```
@@ -86,7 +87,6 @@ rm -rf ~/rocky-linux-distro/distro.qcow2
 ## Download new image
 
 See previous instruction
-
 
 # Example reports
 

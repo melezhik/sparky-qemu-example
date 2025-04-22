@@ -35,7 +35,8 @@ does Sparky::JobApi::Role
           repo => config()<repo>,
           branch => config()<branch>,
           download_distro => config()<download_distro> ?? "yes" !! "no",
-          qemu_binary => tags()<qemu_binary>, 
+          qemu_binary => tags()<qemu_binary>,
+          cpu => tags()<cpu>,
         ),
       });
 
@@ -101,7 +102,7 @@ does Sparky::JobApi::Role
 
         say "wait up to 20 munutes till bootstrap has finished";
 
-        my $st = self.wait-job($j, %( :1200timeout ) );
+        my $st = self.wait-job($j, %( :7200timeout ) );
 
         unless $st<OK> {
           say "qemu box is not good, stopping qemu session and exiting ...";
@@ -264,6 +265,7 @@ does Sparky::JobApi::Role
       iso => "{%*ENV<HOME>}/rocky-linux-distro/distro.qcow2",
       seed => "/tmp/init.iso",
       qemu_binary => tags()<qemu_binary>,
+      cpu => tags()<cpu>,
     );
 
   }
