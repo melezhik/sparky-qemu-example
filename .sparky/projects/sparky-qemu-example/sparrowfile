@@ -266,6 +266,7 @@ does Sparky::JobApi::Role
       seed => "/tmp/init.iso",
       qemu_binary => tags()<qemu_binary>,
       cpu => tags()<cpu>,
+      qemu_opts => tags()<qemu_opts>,
     );
 
   }

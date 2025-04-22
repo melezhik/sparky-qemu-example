@@ -2,7 +2,7 @@ sparrowdo:
   localhost: true
   no_sudo: true
   tags: stage=main 
-allow_manual_run: true  
+allow_manual_run: true
 vars:
   -
       name: use_case_repo
@@ -35,3 +35,6 @@ vars:
       values: [ host, max ]
       type: select
       default: max
+  -
+      name: qemu_opts
+      type: input

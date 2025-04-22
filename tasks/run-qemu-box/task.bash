@@ -8,8 +8,11 @@ qemu_binary=$(config qemu_binary)
 
 cpu=$(config cpu)
 
+qemu_opts=$(config qemu_opts)
+
 echo "qemu_binary: $qemu_binary"
 echo "cpu: $cpu"
+echo "qemu_opts: $qemu_opts"
 
 test -f $iso && echo "qcow2 image exists"
 
@@ -33,6 +36,7 @@ else
     -m 6024M \
     -cpu $cpu \
     -vnc none \
+    $qemu_opts \
     -drive "file=$iso,index=0,format=qcow2,media=disk" \
     -drive file=$seed,index=1,media=cdrom \
     -nographic

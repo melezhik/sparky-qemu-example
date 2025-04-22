@@ -1,1 +1,2 @@
 cpu: max
+qemu_opts: ""
