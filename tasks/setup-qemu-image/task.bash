@@ -27,7 +27,7 @@ users:
     lock_passwd: false
     plain_text_passwd: qwerty
     ssh_authorized_keys:
-      %key%
+      - %key%
 DATA
 
 export CI_KEY=$(cat ~/.ssh/id_rsa.pub)
