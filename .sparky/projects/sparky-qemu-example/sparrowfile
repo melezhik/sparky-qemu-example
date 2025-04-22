@@ -37,6 +37,7 @@ does Sparky::JobApi::Role
           download_distro => config()<download_distro> ?? "yes" !! "no",
           qemu_binary => tags()<qemu_binary>,
           cpu => tags()<cpu>,
+          qemu_opts => tags()<qemu_opts>,
         ),
       });
 
