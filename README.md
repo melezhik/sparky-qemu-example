@@ -61,6 +61,16 @@ is an entry point for use case scenario
 
 Path to qemu binary 
 
+## cpu
+
+Set qemu cli -cpu option
+
+## qemu_opts
+
+Set arbitrary qemu cli options, for example:
+
+`-accel kvm -smp 8`
+
 ## dump_task_code
 
 If enabled dump scenario code, useful for debugging
