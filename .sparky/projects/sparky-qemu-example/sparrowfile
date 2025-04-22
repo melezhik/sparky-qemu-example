@@ -280,7 +280,7 @@ does Sparky::JobApi::Role
     
     bash "echo OK";
 
-    bash "sudo yum install git -y";
+    bash "sudo apk --no-cache add git";
 
     git-scm tags()<use_case_repo>, %(
         to => "scm",
@@ -305,12 +305,10 @@ does Sparky::JobApi::Role
 
     say "rebooting machine ...";
 
-    bash "sudo yum install coreutils -y";
+    bash "sudo apk --no-cache add coreutils git";
 
     directory "scm";
     
-    bash "sudo yum install git -y";
-
     git-scm tags()<repo>, %(
         to => "scm",
         branch => "HEAD",
