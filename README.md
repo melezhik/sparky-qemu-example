@@ -13,13 +13,10 @@ cd .distros
 
 # download qcow2 image
 
-# depending on OS, uncomment one of the following "wget" lines
+wget https://dl-cdn.alpinelinux.org/alpine/v3.21/releases/cloud/nocloud_alpine-3.21.2-x86_64-bios-cloudinit-metal-r0.qcow2 -O distro.qcow2
 
-# wget https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-GenericCloud-Base-9.5-20241118.0.x86_64.qcow2 -O distro.qcow2 
-
-# wget https://dl-cdn.alpinelinux.org/alpine/v3.21/releases/cloud/nocloud_alpine-3.21.2-x86_64-bios-cloudinit-metal-r0.qcow2 -O distro.qcow2
-
-# for alpine linux image increase size
+# resize is required as alpine images
+# does not have enough disk by default
 
 qemu-img resize distro.qcow2  +1G
 
@@ -45,7 +42,7 @@ Sparrow dependencies installed
 ## qemu_new_session
 
 Disable this if you already have an active qemu session (VM running and accessible
-by ssh, port 10022, login: admin) and so don't want to start a new session
+by ssh, port 10022, login: alpine) and so don't want to start a new session
 
 ## qemu_shut
 
