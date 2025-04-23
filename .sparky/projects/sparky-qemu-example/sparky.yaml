@@ -6,7 +6,7 @@ allow_manual_run: true
 vars:
   -
       name: use_case_repo
-      default: https://github.com/melezhik/rocky-linux-lamp-check.git
+      default: https://github.com/melezhik/sparky-alpine-nginx.git
       type: input
   -
       name: qemu_binary
