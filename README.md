@@ -9,7 +9,7 @@ Example of running qemu boxes under Sparky
 ```
 mkdir -p ~/.distros
 
-cd .distros 
+cd ~/.distros 
 
 # download qcow2 image
 
