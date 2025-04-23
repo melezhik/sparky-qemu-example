@@ -1,8 +1,8 @@
 set -e
 
-mkdir -p ~/rocky-linux-distro
+mkdir -p ~/.distros
 
-cd ~/rocky-linux-distro
+cd ~/.distros
 
 distro_url=$(config distro_url)
 download_distro=$(config download_distro)

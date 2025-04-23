@@ -260,10 +260,10 @@ does Sparky::JobApi::Role
       distro_url => tags()<distro_url>,
     );
 
-    bash "ls -lth {%*ENV<HOME>}/rocky-linux-distro";
+    bash "ls -lth {%*ENV<HOME>}/.distros";
 
     task-run "scm/tasks/run-qemu-box", %(
-      iso => "{%*ENV<HOME>}/rocky-linux-distro/distro.qcow2",
+      iso => "{%*ENV<HOME>}/.distros/distro.qcow2",
       seed => "/tmp/init.iso",
       qemu_binary => tags()<qemu_binary>,
       cpu => tags()<cpu>,

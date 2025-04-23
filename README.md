@@ -7,9 +7,9 @@ Example of running qemu boxes under Sparky
 1. Prepare image to test
 
 ```
-mkdir -p ~/rocky-linux-distro
+mkdir -p ~/.distros
 
-cd rocky-linux-distro 
+cd .distros 
 
 # download qcow2 image
 
@@ -90,7 +90,7 @@ s6 --task-run tasks/stop-qemu-box@qemu_binary=qemu-system-x86_64
 
 ```bash
 rm -rf /tmp/init.iso
-rm -rf ~/rocky-linux-distro/distro.qcow2
+rm -rf ~/.distros/distro.qcow2
 ```
 
 ## Download new image
