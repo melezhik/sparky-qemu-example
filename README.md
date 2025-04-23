@@ -100,7 +100,7 @@ See previous instruction
 
 ## Job menu
 
-![main](images/main-menu.jpeg)
+![job](images/job.png)
 
 ## Qemu session
 
