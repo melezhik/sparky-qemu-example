@@ -25,8 +25,9 @@ qemu-img resize distro.qcow2  +1G
 2. Copy sparky job
 
 ```
-git clone https://github.com/melezhik/sparky-qemu-example.git 
-cp -r .sparky/projects ~/.sparky/
+git clone https://github.com/melezhik/sparky-qemu-example.git
+cd sparky-qemu-example
+cp -rv .sparky/projects ~/.sparky/
 ```
 
 3. Go to sparky - http://127.0.0.1:4000 and run sparky-qemu-example job
