@@ -16,7 +16,7 @@ cd .distros
 wget https://dl-cdn.alpinelinux.org/alpine/v3.21/releases/cloud/nocloud_alpine-3.21.2-x86_64-bios-cloudinit-metal-r0.qcow2 -O distro.qcow2
 
 # resize is required as alpine images
-# does not have enough disk by default
+# do not have enough disk by default
 
 qemu-img resize distro.qcow2  +1G
 
