@@ -50,7 +50,9 @@ Enable this if you want to shut qemu instance (VM) in the end of the test
 
 ## use_case_repo
 
-Use case scenario git repository, as an example look at https://github.com/melezhik/rocky-linux-lamp-check , the repo has to have [main.raku](https://github.com/melezhik/rocky-linux-lamp-check/blob/main/main.raku) file at the root, which
+Use case scenario git repository, as an example look at 
+https://github.com/melezhik/sparky-alpine-nginx,
+the repo has to have [main.raku](https://github.com/melezhik/sparky-alpine-nginx/blob/main/main.raku) file at the root, which
 is an entry point for use case scenario
 
 ## qemu_binary
@@ -96,7 +98,22 @@ See previous instruction
 
 # Example reports
 
+## Job menu
+
 ![main](images/main-menu.jpeg)
+
+## Qemu session
+
 ![session](images/session.png)
+
+## Sparrow bootstrap
+
 ![bootstrap](images/bootstrap.png)
+
+## Nginx install
+
+![nginx](images/nginx.png)
+
+## VM reboot
+
 ![reboot](images/reboot.png)
