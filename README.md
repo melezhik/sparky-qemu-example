@@ -96,6 +96,7 @@ See previous instruction
 
 # Example reports
 
-![rocky1](images/main-menu.jpeg)
-![rocky2](images/rocky.jpeg)
-![rocky3](images/rocky3.jpeg)
+![main](images/main-menu.jpeg)
+![session](images/session.png)
+![bootstrap](images/bootstrap.png)
+![reboot](images/reboot.png)
