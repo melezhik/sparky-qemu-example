@@ -38,7 +38,7 @@ vars:
   -
       name: qemu_opts
       type: input
-  -
-      name: use_case_sudo
-      type: checkbox
-      default: false
+  #-
+  #    name: use_case_sudo
+  #    type: checkbox
+  #    default: false
