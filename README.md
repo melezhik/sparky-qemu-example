@@ -74,6 +74,10 @@ Set arbitrary qemu cli options, for example:
 
 If enabled dump scenario code, useful for debugging
 
+## use_case_sudo
+
+If enable use sudo when run use case scenario
+
 
 # Clean up
 

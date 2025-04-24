@@ -118,7 +118,9 @@ does Sparky::JobApi::Role
     say "run use case scenario on qemu box";
 
     my $j = Sparky::JobApi.new: :project<qemu-use-case>;
-      
+
+    my $no_sudo = tags()<use_case_sudo> ?? False !! True;
+
     $j.queue({
       description => "use case scenario",
       tags => %(
@@ -132,7 +134,7 @@ does Sparky::JobApi::Role
         ssh_user => config()<user>,
         ssh_port => 10022,
         host => "127.0.0.1",
-        :no_sudo,
+        $no_sudo,
         #:debug,
       ),
     });
@@ -215,7 +217,7 @@ does Sparky::JobApi::Role
               ssh_user => config()<user>,
               ssh_port => 10022,
               host => "127.0.0.1",
-              :no_sudo,
+              $no_sudo,
               #:debug,
             ),
           });
