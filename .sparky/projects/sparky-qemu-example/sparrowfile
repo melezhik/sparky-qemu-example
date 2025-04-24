@@ -134,7 +134,7 @@ does Sparky::JobApi::Role
         ssh_user => config()<user>,
         ssh_port => 10022,
         host => "127.0.0.1",
-        $no_sudo,
+        :$no_sudo,
         #:debug,
       ),
     });
@@ -217,7 +217,7 @@ does Sparky::JobApi::Role
               ssh_user => config()<user>,
               ssh_port => 10022,
               host => "127.0.0.1",
-              $no_sudo,
+              :$no_sudo,
               #:debug,
             ),
           });
