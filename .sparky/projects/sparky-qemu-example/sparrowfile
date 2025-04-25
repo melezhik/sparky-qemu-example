@@ -275,7 +275,7 @@ does Sparky::JobApi::Role
   }
 
   method stage-qemu-bootstrap {
-    say "hello from RockyLinux";
+    say "hello from qemu";
   }
 
   method stage-use-case {
