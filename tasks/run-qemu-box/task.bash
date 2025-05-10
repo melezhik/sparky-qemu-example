@@ -6,9 +6,16 @@ seed=$(config seed)
 
 qemu_binary=$(config qemu_binary)
 
+cpu=$(config cpu)
+
+qemu_opts=$(config qemu_opts)
+
 echo "qemu_binary: $qemu_binary"
+echo "cpu: $cpu"
+echo "qemu_opts: $qemu_opts"
 
 test -f $iso && echo "qcow2 image exists"
+
 test -f $seed && echo "seed image exists"
 
 if test $os = "darwin"; then
@@ -16,7 +23,7 @@ if test $os = "darwin"; then
     -net nic \
     -net user,hostfwd=tcp::10022-:22 \
     -m 6024M \
-    -cpu max \
+    -cpu $cpu \
     -smp 8 \
     -vnc none \
     -drive "file=$iso,index=0,format=qcow2,media=disk" \
@@ -27,10 +34,12 @@ else
     -net nic \
     -net user,hostfwd=tcp::10022-:22 \
     -m 6024M \
-    -cpu max \
-    -smp 8 \
+    -cpu $cpu \
     -vnc none \
+    $qemu_opts \
     -drive "file=$iso,index=0,format=qcow2,media=disk" \
     -drive file=$seed,index=1,media=cdrom \
     -nographic
 fi
+
+#    -smp 8 \

@@ -1,3 +1,5 @@
 download_distro: no
 
 qemu-binary: qemu-kvm
+
+user: alpine

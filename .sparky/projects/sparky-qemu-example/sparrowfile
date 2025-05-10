@@ -35,7 +35,9 @@ does Sparky::JobApi::Role
           repo => config()<repo>,
           branch => config()<branch>,
           download_distro => config()<download_distro> ?? "yes" !! "no",
-          qemu_binary => tags()<qemu_binary>, 
+          qemu_binary => tags()<qemu_binary>,
+          cpu => tags()<cpu>,
+          qemu_opts => tags()<qemu_opts>,
         ),
       });
 
@@ -49,7 +51,7 @@ does Sparky::JobApi::Role
         my $s = task-run "scm/tasks/check-ssh", %(
           :host<127.0.0.1>,
           :port<10022>,
-          :user<admin>,
+          user => config()<user>,
         ); 
         if $s<state> eq "alive" {
           $ssh-ok = True;
@@ -77,8 +79,11 @@ does Sparky::JobApi::Role
         exit(1);
       }
 
+
       unless tags()<skip_bootstrap> {
 
+        sleep(20);
+  
         $j = Sparky::JobApi.new: :project<qemu-bootstrap>;
         
         $j.queue({
@@ -88,7 +93,7 @@ does Sparky::JobApi::Role
           ),
           sparrowdo => %(
             :bootstrap,
-            ssh_user => "admin",
+            ssh_user => config()<user>,
             ssh_port => 10022,
             host => "127.0.0.1",
           ),
@@ -98,7 +103,7 @@ does Sparky::JobApi::Role
 
         say "wait up to 20 munutes till bootstrap has finished";
 
-        my $st = self.wait-job($j, %( :1200timeout ) );
+        my $st = self.wait-job($j, %( :7200timeout ) );
 
         unless $st<OK> {
           say "qemu box is not good, stopping qemu session and exiting ...";
@@ -113,7 +118,9 @@ does Sparky::JobApi::Role
     say "run use case scenario on qemu box";
 
     my $j = Sparky::JobApi.new: :project<qemu-use-case>;
-      
+
+    my $no_sudo = tags()<use_case_sudo> ?? False !! True;
+
     $j.queue({
       description => "use case scenario",
       tags => %(
@@ -124,10 +131,10 @@ does Sparky::JobApi::Role
         parent_job_name => tags()<SPARKY_PROJECT>,
       ),
       sparrowdo => %(
-        ssh_user => "admin",
+        ssh_user => config()<user>,
         ssh_port => 10022,
         host => "127.0.0.1",
-        :no_sudo,
+        :$no_sudo,
         #:debug,
       ),
     });
@@ -152,7 +159,7 @@ does Sparky::JobApi::Role
             repo => config()<repo>,
           ),
           sparrowdo => %(
-            ssh_user => "admin",
+            ssh_user => config()<user>,
             ssh_port => 10022,
             host => "127.0.0.1",
             :no_sudo,
@@ -182,7 +189,7 @@ does Sparky::JobApi::Role
           my $s = task-run "scm/tasks/check-ssh", %(
             :host<127.0.0.1>,
             :port<10022>,
-            :user<admin>,
+            user => config()<user>,
           ); 
           if $s<state> eq "alive" {
             $ssh-ok = True;
@@ -207,10 +214,10 @@ does Sparky::JobApi::Role
                 :reboot-ok,
             ),
             sparrowdo => %(
-              ssh_user => "admin",
+              ssh_user => config()<user>,
               ssh_port => 10022,
               host => "127.0.0.1",
-              :no_sudo,
+              :$no_sudo,
               #:debug,
             ),
           });
@@ -255,18 +262,20 @@ does Sparky::JobApi::Role
       distro_url => tags()<distro_url>,
     );
 
-    bash "ls -lth {%*ENV<HOME>}/rocky-linux-distro";
+    bash "ls -lth {%*ENV<HOME>}/.distros";
 
     task-run "scm/tasks/run-qemu-box", %(
-      iso => "{%*ENV<HOME>}/rocky-linux-distro/distro.qcow2",
+      iso => "{%*ENV<HOME>}/.distros/distro.qcow2",
       seed => "/tmp/init.iso",
       qemu_binary => tags()<qemu_binary>,
+      cpu => tags()<cpu>,
+      qemu_opts => tags()<qemu_opts>,
     );
 
   }
 
   method stage-qemu-bootstrap {
-    say "hello from RockyLinux";
+    say "hello from qemu";
   }
 
   method stage-use-case {
@@ -275,7 +284,7 @@ does Sparky::JobApi::Role
     
     bash "echo OK";
 
-    bash "sudo yum install git -y";
+    bash "sudo apk --no-cache add git";
 
     git-scm tags()<use_case_repo>, %(
         to => "scm",
@@ -300,12 +309,10 @@ does Sparky::JobApi::Role
 
     say "rebooting machine ...";
 
-    bash "sudo yum install coreutils -y";
+    bash "sudo apk --no-cache add coreutils git";
 
     directory "scm";
     
-    bash "sudo yum install git -y";
-
     git-scm tags()<repo>, %(
         to => "scm",
         branch => "HEAD",
